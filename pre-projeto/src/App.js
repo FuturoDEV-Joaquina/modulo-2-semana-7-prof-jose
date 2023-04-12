@@ -1,8 +1,9 @@
-import Form from "./components/Form/Form";
+import Popup from "./components/Popup/Popup";
 
 function App() {
+
   return (
-    <Form />
+    <Popup/>
   );
 }
 
