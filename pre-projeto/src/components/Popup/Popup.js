@@ -10,8 +10,13 @@ const Popup = props => {
 
   return(
     <>
-      { !aberto && <button onClick={ () => setAberto(true) }>Adicionar Pet</button> }
-      { aberto && <Form handleAberto={updateAberto}/> }
+      { !aberto && 
+        <button className="btn" 
+        onClick={ () => {setAberto(true); props.updateShowLista(false)} }>
+          Adicionar Pet
+        </button> 
+      }
+      { aberto && <Form handleAberto={updateAberto} updatePets={props.updatePets} pets={props.pets} updateShowLista={props.updateShowLista}/> }
     </>
   );
 }

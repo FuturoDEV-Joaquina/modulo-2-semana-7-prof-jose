@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import './Form.css';
 
 const Form = props => {
   const {pet} = props;
@@ -6,16 +7,9 @@ const Form = props => {
     nome: pet ? pet.nome : '',
     idade: pet ? pet.idade : '',
     especie: pet ? pet.especie : '',
-    raca: pet ? pet.raca : '',
-    responsavel: pet ? pet.responsavel : ''
+    raca: pet ? pet.raca : ''
   });
-  const [prevFormData, setPrevFormData] = useState([]);
-
-  useEffect(()=>{
-    const data = localStorage.getItem('pets') ? JSON.parse(localStorage.getItem('pets')) : [];
-    setPrevFormData(data)
-  })
-
+  
   const handleChange = event => {
     setForm({
       ...form,
@@ -25,54 +19,52 @@ const Form = props => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(form);
-
-    localStorage.setItem('pets', JSON.stringify([...prevFormData, form]));
-
+    const array = [...props.pets, form];
+    localStorage.setItem('pets', JSON.stringify(array));
+    props.updatePets(array);
+    props.updateShowLista(true);
     props.handleAberto(false);
+
   }
 
   return(
     <form onSubmit={event => handleSubmit(event)}>
-      <label>
-        Nome:
-        <input type="text" name="nome" 
-        onChange={event => handleChange(event)} value={form.nome} required/>
-      </label>
-      <br />
+      <div className="form-row">
+        <label>
+          Nome <br/>
+          <input type="text" name="nome" 
+          onChange={event => handleChange(event)} value={form.nome} required/>
+        </label>
+      </div>
 
+      <div className="form-row">
       <label>
-        Idade:
+        Idade <br/>
         <input type="number" name="idade" 
         onChange={event => handleChange(event)} value={form.idade} required/>
       </label>
-      <br />
+      </div>
       
+      <div className="form-row">
       <label>
-        Espécie:
+        Espécie <br/>
         <input type="text" name="especie" 
         onChange={event => handleChange(event)} value={form.especie} required/>
       </label>
-      <br />
-      
-      <label>
-        Raça:
-        <input type="text" name="raca" 
-        onChange={event => handleChange(event)} value={form.raca} required/>
-      </label>
-      <br/>
+      </div>
 
-      <label>
-        Telefone do Responsável:
-        <input type="tel" name="responsavel" 
-        onChange={event => handleChange(event)} value={form.responsavel} 
-        pattern="\([0-9]{2}\)[0-9]{5}-[0-9]{4}" required/>
-      </label>
-
-      <br />
+      <div className="form-row">
+        <label>
+          Raça <br/>
+          <input type="text" name="raca" 
+          onChange={event => handleChange(event)} value={form.raca} required/>
+        </label>
+      </div>
       
-      <button type="submit">Salvar</button>
-      <button onClick={() => props.handleAberto(false)}>Cancelar</button>
+      <button type="submit" className="btn">Salvar</button>
+      <button className="btn" onClick={() => { props.handleAberto(false);  props.updateShowLista(true);}}>
+        Cancelar
+      </button>
     </form>
   )
 
