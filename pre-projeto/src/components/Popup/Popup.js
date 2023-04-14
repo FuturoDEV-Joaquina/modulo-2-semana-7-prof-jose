@@ -1,22 +1,16 @@
-import { useState } from "react";
 import Form from "../Form/Form";
 
 const Popup = props => {
-  const [aberto, setAberto] = useState(false);
-
-  const updateAberto = valor => {
-    setAberto(valor);
-  }
-
+  const {aberto} = props
   return(
     <>
       { !aberto && 
         <button className="btn" 
-        onClick={ () => {setAberto(true); props.updateShowLista(false)} }>
+        onClick={ () => {props.updateAberto(true); props.updateShowLista(false)} }>
           Adicionar Pet
         </button> 
       }
-      { aberto && <Form handleAberto={updateAberto} updatePets={props.updatePets} pets={props.pets} updateShowLista={props.updateShowLista}/> }
+      { aberto && <Form updateAberto={props.updateAberto} updatePets={props.updatePets} pets={props.pets} updateShowLista={props.updateShowLista}/> }
     </>
   );
 }

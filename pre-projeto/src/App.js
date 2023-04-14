@@ -4,13 +4,18 @@ import { useState, useEffect } from "react";
 function App() {
   const [pets, setPets] = useState([]);
   const [showLista, setShowLista] = useState(true);
+  const [aberto, setAberto] = useState(false);
 
   const updatePets = value => {
-    setPets(value)
+    setPets(value);
   }
 
   const updateShowLista = value => {
     setShowLista(value)
+  }
+
+  const updateAberto = valor => {
+    setAberto(valor);
   }
 
   useEffect(() => {
@@ -20,8 +25,8 @@ function App() {
 
   return (
     <div>
-      <Popup updatePets={updatePets} pets={pets} updateShowLista={updateShowLista}/>
-      { showLista && <Lista pets={pets}/> }
+      <Popup updateAberto={updateAberto} aberto={aberto} updatePets={updatePets} pets={pets} updateShowLista={updateShowLista}/>
+      { showLista && <Lista pets={pets} updateAberto={updateAberto} updateShowLista={updateShowLista} updatePets={updatePets}/> }
     </div>
   );
 }
