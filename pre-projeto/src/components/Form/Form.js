@@ -3,6 +3,7 @@ import './Form.css';
 
 const Form = props => {
   const [form, setForm] = useState({});
+  const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState();
 
   useEffect(() => {
@@ -10,6 +11,10 @@ const Form = props => {
     if(pet){
       setSelectedPet(pet);
       setForm(pet);
+    }
+    const lista = JSON.parse(localStorage.getItem('pets')); 
+    if(lista){
+      setPets(lista);
     }
   }, []);
   
@@ -40,12 +45,12 @@ const Form = props => {
     if(!('castrado' in form)){
       formData.castrado = false;
     }
+    console.log(selectedPet);
     
     if(selectedPet){
       const updatedPets = props.pets.map(pet => {
         if(JSON.stringify(pet) === JSON.stringify(selectedPet)){
-          console.log(pet);
-          console.log(selectedPet);
+          console.log(formData);
           return formData;
         }else{
           return pet;
@@ -54,6 +59,7 @@ const Form = props => {
       array = updatedPets;
     }else{
       array = [...props.pets, formData];
+      console.log(...props.pets)
     }
     localStorage.removeItem('selectedPet');
     localStorage.setItem('pets', JSON.stringify(array));
@@ -61,6 +67,20 @@ const Form = props => {
     props.updateShowLista(true);
     props.updateAberto(false);
 
+  }
+  
+  /*
+  * Função responsável pela exclusão de itens da lista
+  */
+  const removePet = selectedPet => {
+    const petIndex = pets.findIndex(pet => JSON.stringify(pet) === JSON.stringify(selectedPet));
+    pets.splice(petIndex, 1);
+    console.log(pets);
+    localStorage.setItem('pets', JSON.stringify(pets));
+    props.updatePets(pets);
+    props.updateAberto(false);
+    props.updateShowLista(true);
+    localStorage.removeItem('selectedPet');
   }
 
   const handleCancel = () => {
@@ -111,7 +131,8 @@ const Form = props => {
       </div>
       </div>
       
-      <button type="submit" className="btn">Salvar</button>
+      <button type="submit" className="btn">{selectedPet ? 'Editar' : 'Adicionar'}</button>
+      {selectedPet ? <button onClick={event => {event.preventDefault(); removePet(selectedPet);}} className="btn">Excluir</button> : <></> }
       <button className="btn" onClick={() => {handleCancel()}}>
         Cancelar
       </button>

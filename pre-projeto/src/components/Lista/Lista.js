@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 const Lista = props => {
 
   const [pets, setPets] = useState([]);
+  const [castrado, setCastrado] = useState(false);
   const [selectedPets, setSelectedPets] = useState([])
 
   useEffect(() => {
@@ -17,20 +18,31 @@ const Lista = props => {
   /*
   * Função responsável por filtrar os itens que serão mostrados na lista
   */
-  const handleFiltro = event => {
-    const selected = pets.every(pet => pet.castrado === event.target.checked);
+  const handleFiltro = () => {
+    const selected = pets.filter(pet => pet.castrado === castrado);
     setSelectedPets(selected);
+  }
+
+  /*
+  * Função responsável por limpar o filtro dos elementos mostrados na
+  */
+  const limpaFiltro = () => {
+    setCastrado(false);
+    setSelectedPets(pets);
   }
 
   return(
     <div>
-      <form>
+      <form onSubmit={e => e.preventDefault()}>
         <b>Filtro</b> <br/>
         <label>
           Castrado 
           <input type="checkbox" name="castrado" 
-          onChange={event => handleFiltro(event)}/>
+          onChange={event => setCastrado(!castrado)} checked={castrado}/>
         </label>
+        <br/>
+        <button onClick={handleFiltro}>Filtrar</button>
+        <button onClick={limpaFiltro}>Limpar</button>
       </form>
       {selectedPets && selectedPets.map(pet => <ItemLista pet={pet} pets={pets} key={pet.nome} updateAberto={props.updateAberto} updateShowLista={props.updateShowLista}/>)}
     </div>
